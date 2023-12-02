@@ -23,9 +23,9 @@ func Puzzle1(input string) int {
 			gameListing := strings.Split(game, ", ")
 			currentRed, currentGreen, currentBlue := countCubes(gameListing)
 
-            if currentRed > totalRed || currentGreen > totalGreen || currentBlue > totalBlue {
-                gameIsValid = false
-            }
+			if currentRed > totalRed || currentGreen > totalGreen || currentBlue > totalBlue {
+				gameIsValid = false
+			}
 		}
 
 		if gameIsValid {
