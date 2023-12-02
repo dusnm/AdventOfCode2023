@@ -1,7 +1,6 @@
 package day2
 
 import (
-	"strconv"
 	"strings"
 )
 
@@ -17,53 +16,16 @@ func Puzzle1(input string) int {
 			continue
 		}
 
-		tokens := strings.FieldsFunc(line, func(r rune) bool {
-			return r == ':' || r == ';'
-		})
-
-		idPart := strings.Replace(tokens[0], "Game ", "", 1)
-		gamePart := tokens[1:]
-
-		// This is fine 🔥🐶🔥
-		id, _ := strconv.Atoi(idPart)
+		id, gamePart := tokenizeLine(line)
 
 		gameIsValid := true
 		for _, game := range gamePart {
-			parts := strings.Split(game, ", ")
-			for _, part := range parts {
-				currentRed := 0
-				currentGreen := 0
-				currentBlue := 0
+			gameListing := strings.Split(game, ", ")
+			currentRed, currentGreen, currentBlue := countCubes(gameListing)
 
-				part = strings.TrimSpace(part)
-
-				// Exploiting the fact that the number of cubes
-				// is at most two digits long
-				value := strings.TrimSpace(part[0:2])
-
-				// Moving the index of the first letter of the color accordingly
-				var color rune
-				if len(value) > 1 {
-					color = rune(part[3])
-				} else {
-					color = rune(part[2])
-				}
-
-				// This is fine 🔥🐶🔥
-				v, _ := strconv.Atoi(value)
-				switch color {
-				case 'r':
-					currentRed += v
-				case 'g':
-					currentGreen += v
-				case 'b':
-					currentBlue += v
-				}
-
-				if currentRed > totalRed || currentGreen > totalGreen || currentBlue > totalBlue {
-					gameIsValid = false
-				}
-			}
+            if currentRed > totalRed || currentGreen > totalGreen || currentBlue > totalBlue {
+                gameIsValid = false
+            }
 		}
 
 		if gameIsValid {
