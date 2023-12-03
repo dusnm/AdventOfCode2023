@@ -46,10 +46,8 @@ func load(input string) *Matrix {
 }
 
 func (m *Matrix) IsBounded(row, column int) bool {
-	if row >= 0 && row < m.Height {
-		if column >= 0 && column < m.Width {
-			return true
-		}
+	if row >= 0 && row < m.Height && column >= 0 && column < m.Width {
+		return true
 	}
 
 	return false
