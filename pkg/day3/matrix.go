@@ -35,6 +35,9 @@ func New(input string) *Matrix {
 			inner = append(inner, c)
 		}
 
+		// Pad the end with a single dot to avoid
+		// checking for numbers at the end of the line
+		inner = append(inner, '.')
 		data = append(data, inner)
 	}
 
@@ -128,19 +131,6 @@ func (m *Matrix) FindPartNumbers() []PartNumber {
 			if unicode.IsDigit(c) {
 				builder.WriteRune(c)
 				adjacency = append(adjacency, m.GetAdjacencyList(row, column)...)
-
-				if column == len(line)-1 {
-					number := builder.String()
-					value, _ := strconv.Atoi(number)
-					parts = append(parts, PartNumber{
-						Value:     value,
-						Adjacency: adjacency,
-						Length:    len(number),
-					})
-
-					builder.Reset()
-					adjacency = make([]Adjacent, 0)
-				}
 			} else {
 				if builder.Len() != 0 {
 					number := builder.String()
