@@ -124,16 +124,16 @@ func (m *Matrix) GetAdjacencyList(row, column int) []Adjacent {
 	return adjacencyList
 }
 
-func findPartNumbers(matrix *Matrix) []PartNumber {
+func (m *Matrix) FindPartNumbers() []PartNumber {
 	parts := make([]PartNumber, 0)
 
-	for row, line := range matrix.Data {
+	for row, line := range m.Data {
 		adjacency := make([]Adjacent, 0)
 		builder := strings.Builder{}
 		for column, c := range line {
 			if unicode.IsDigit(c) {
 				builder.WriteRune(c)
-				adjacency = append(adjacency, matrix.GetAdjacencyList(row, column)...)
+				adjacency = append(adjacency, m.GetAdjacencyList(row, column)...)
 
 				if column == len(line)-1 {
 					number := builder.String()

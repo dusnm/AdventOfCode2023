@@ -10,9 +10,9 @@ type (
 
 func Puzzle1(input string) int {
 	sumOfPartNumbers := 0
-	partNumbers := findPartNumbers(load(input))
+	matrix := load(input)
 
-	for _, part := range partNumbers {
+	for _, part := range matrix.FindPartNumbers() {
 		sumOfPartNumbers += part.Value
 	}
 

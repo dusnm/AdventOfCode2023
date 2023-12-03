@@ -2,10 +2,10 @@ package day3
 
 func Puzzle2(input string) int {
 	sumOfGearRatios := 0
-	partNumbers := findPartNumbers(load(input))
+	matrix := load(input)
 
 	gears := map[string][]int{}
-	for _, partNumber := range partNumbers {
+	for _, partNumber := range matrix.FindPartNumbers() {
 		for _, adjacency := range partNumber.Adjacency {
 			if adjacency.Value == '*' {
 				gearPartNumbers := gears[adjacency.String()]
