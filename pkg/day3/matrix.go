@@ -131,19 +131,21 @@ func (m *Matrix) FindPartNumbers() []PartNumber {
 			if unicode.IsDigit(c) {
 				builder.WriteRune(c)
 				adjacency = append(adjacency, m.GetAdjacencyList(row, column)...)
-			} else {
-				if builder.Len() != 0 {
-					number := builder.String()
-					value, _ := strconv.Atoi(number)
-					parts = append(parts, PartNumber{
-						Value:     value,
-						Adjacency: adjacency,
-						Length:    len(number),
-					})
 
-					builder.Reset()
-					adjacency = make([]Adjacent, 0)
-				}
+				continue
+			}
+
+			if builder.Len() != 0 {
+				number := builder.String()
+				value, _ := strconv.Atoi(number)
+				parts = append(parts, PartNumber{
+					Value:     value,
+					Adjacency: adjacency,
+					Length:    len(number),
+				})
+
+				builder.Reset()
+				adjacency = make([]Adjacent, 0)
 			}
 		}
 	}
