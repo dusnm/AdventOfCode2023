@@ -25,7 +25,7 @@ func (a Adjacent) String() string {
 	return fmt.Sprintf("%dx%d", a.X, a.Y)
 }
 
-func load(input string) *Matrix {
+func New(input string) *Matrix {
 	lines := strings.Split(input, "\n")
 	data := make([][]rune, 0, len(lines))
 
@@ -46,11 +46,7 @@ func load(input string) *Matrix {
 }
 
 func (m *Matrix) IsBounded(row, column int) bool {
-	if row >= 0 && row < m.Height && column >= 0 && column < m.Width {
-		return true
-	}
-
-	return false
+	return row >= 0 && row < m.Height && column >= 0 && column < m.Width
 }
 
 func (m *Matrix) GetAdjacencyList(row, column int) []Adjacent {

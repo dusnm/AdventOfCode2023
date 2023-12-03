@@ -10,7 +10,7 @@ type (
 
 func Puzzle1(input string) int {
 	sumOfPartNumbers := 0
-	matrix := load(input)
+	matrix := New(input)
 
 	for _, part := range matrix.FindPartNumbers() {
 		sumOfPartNumbers += part.Value

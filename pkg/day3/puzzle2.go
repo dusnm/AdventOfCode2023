@@ -2,7 +2,7 @@ package day3
 
 func Puzzle2(input string) int {
 	sumOfGearRatios := 0
-	matrix := load(input)
+	matrix := New(input)
 
 	gears := map[string][]int{}
 	for _, partNumber := range matrix.FindPartNumbers() {
