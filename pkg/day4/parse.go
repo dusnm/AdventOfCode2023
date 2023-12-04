@@ -36,12 +36,10 @@ func (t *transition) HasTransitioned(c rune) bool {
 
 	lastState := t.state[len(t.state)-1]
 
-	// No transition
 	if unicode.IsDigit(c) && unicode.IsDigit(lastState) {
 		return false
 	}
 
-	// No transition
 	if c == ' ' && lastState == ' ' {
 		return false
 	}
@@ -74,19 +72,17 @@ func (g *Game) SetAvailable(c rune, index int) {
 }
 
 func New(input string) []Game {
-	// Parsing solution implemented using a Finite State Machine
 	lines := strings.Count(input, "\n") + 1
 	reader := strings.NewReader(input)
 	scanner := bufio.NewScanner(reader)
 	scanner.Split(bufio.ScanRunes)
 
-	// Initial state
 	games := make([]Game, lines)
-	lineCounter := 0
+	lineIndex := 0
 	winningTransition := transition{}
 	availableTransition := transition{}
-	winningCounter := 0
-	availableCounter := 0
+	winningIndex := 0
+	availableIndex := 0
 	state := StateID
 
 	for scanner.Scan() {
@@ -94,7 +90,7 @@ func New(input string) []Game {
 		switch state {
 		case StateID:
 			if unicode.IsDigit(c) {
-				games[lineCounter].SetID(c)
+				games[lineIndex].SetID(c)
 			}
 
 			if c == ':' {
@@ -102,11 +98,11 @@ func New(input string) []Game {
 			}
 		case StateWinningNumbers:
 			if unicode.IsDigit(c) {
-				games[lineCounter].SetWinning(c, winningCounter)
+				games[lineIndex].SetWinning(c, winningIndex)
 			}
 
 			if c == ' ' && winningTransition.HasTransitioned(c) {
-				winningCounter++
+				winningIndex++
 			}
 
 			winningTransition.Append(c)
@@ -116,11 +112,11 @@ func New(input string) []Game {
 			}
 		case StateAvailableNumbers:
 			if unicode.IsDigit(c) {
-				games[lineCounter].SetAvailable(c, availableCounter)
+				games[lineIndex].SetAvailable(c, availableIndex)
 			}
 
 			if c == ' ' && availableTransition.HasTransitioned(c) {
-				availableCounter++
+				availableIndex++
 			}
 
 			availableTransition.Append(c)
@@ -129,9 +125,9 @@ func New(input string) []Game {
 				state = StateLineEnd
 			}
 		case StateLineEnd:
-			lineCounter++
-			winningCounter = 0
-			availableCounter = 0
+			lineIndex++
+			winningIndex = 0
+			availableIndex = 0
 			winningTransition.Reset()
 			availableTransition.Reset()
 			state = StateID
