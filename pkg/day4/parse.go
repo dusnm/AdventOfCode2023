@@ -75,13 +75,13 @@ func (g *Game) SetAvailable(c rune, index int) {
 
 func New(input string) []Game {
 	// Parsing solution implemented using a Finite State Machine
-	lines := strings.Count(input, "\n")
+	lines := strings.Count(input, "\n") + 1
 	reader := strings.NewReader(input)
 	scanner := bufio.NewScanner(reader)
 	scanner.Split(bufio.ScanRunes)
 
 	// Initial state
-	games := make([]Game, lines+1)
+	games := make([]Game, lines)
 	lineCounter := 0
 	winningTransition := transition{}
 	availableTransition := transition{}
@@ -93,48 +93,41 @@ func New(input string) []Game {
 		c := rune(scanner.Bytes()[0])
 		switch state {
 		case StateID:
-			if c == ':' {
-				state = StateWinningNumbers
-				continue
-			}
-
 			if unicode.IsDigit(c) {
 				games[lineCounter].SetID(c)
 			}
+
+			if c == ':' {
+				state = StateWinningNumbers
+			}
 		case StateWinningNumbers:
-			if c == ' ' && winningTransition.HasTransitioned(c) {
-				winningCounter++
-				winningTransition.Append(c)
-				continue
-			}
-
-			if c == '|' {
-				state = StateAvailableNumbers
-				continue
-			}
-
 			if unicode.IsDigit(c) {
 				games[lineCounter].SetWinning(c, winningCounter)
 			}
 
+			if c == ' ' && winningTransition.HasTransitioned(c) {
+				winningCounter++
+			}
+
 			winningTransition.Append(c)
+
+			if c == '|' {
+				state = StateAvailableNumbers
+			}
 		case StateAvailableNumbers:
-			if c == ' ' && availableTransition.HasTransitioned(c) {
-				availableCounter++
-				availableTransition.Append(c)
-				continue
-			}
-
-			if c == '\n' {
-				state = StateLineEnd
-				continue
-			}
-
 			if unicode.IsDigit(c) {
 				games[lineCounter].SetAvailable(c, availableCounter)
 			}
 
+			if c == ' ' && availableTransition.HasTransitioned(c) {
+				availableCounter++
+			}
+
 			availableTransition.Append(c)
+
+			if c == '\n' {
+				state = StateLineEnd
+			}
 		case StateLineEnd:
 			lineCounter++
 			winningCounter = 0
