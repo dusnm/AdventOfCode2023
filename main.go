@@ -7,6 +7,7 @@ import (
 	"github.com/dusnm/AdventOfCode2023/pkg/day2"
 	"github.com/dusnm/AdventOfCode2023/pkg/day3"
 	"github.com/dusnm/AdventOfCode2023/pkg/day4"
+	"github.com/dusnm/AdventOfCode2023/pkg/day5"
 	"log"
 )
 
@@ -51,6 +52,12 @@ func main() {
 			return []int{
 				day4.Puzzle1(day4.Input()),
 				day4.Puzzle2(day4.Input()),
+			}
+		},
+		func() []int {
+			return []int{
+				day5.Puzzle1(day5.Input()),
+				day5.Puzzle2(day5.Input()),
 			}
 		},
 	}
