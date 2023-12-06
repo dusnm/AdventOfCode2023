@@ -3,12 +3,14 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
+
 	"github.com/dusnm/AdventOfCode2023/pkg/day1"
 	"github.com/dusnm/AdventOfCode2023/pkg/day2"
 	"github.com/dusnm/AdventOfCode2023/pkg/day3"
 	"github.com/dusnm/AdventOfCode2023/pkg/day4"
 	"github.com/dusnm/AdventOfCode2023/pkg/day5"
-	"log"
+	"github.com/dusnm/AdventOfCode2023/pkg/day6"
 )
 
 var dayFlag int
@@ -58,6 +60,12 @@ func main() {
 			return []int{
 				day5.Puzzle1(day5.Input()),
 				day5.Puzzle2(day5.Input()),
+			}
+		},
+		func() []int {
+			return []int{
+				day6.Puzzle1(day6.Input()),
+				day6.Puzzle2(day6.Input()),
 			}
 		},
 	}
