@@ -25,8 +25,66 @@ type (
 	}
 )
 
-var (
-	values = map[rune]int{
+func (h *Hand) DetermineKind(withJokers bool) int {
+	counts := make(map[rune]int, len(h.Value))
+	hasThreeOfAKind := false
+	pairs, jokers := 0, 0
+
+	for _, label := range h.Value {
+		if withJokers && label == 'J' {
+			jokers++
+		} else {
+			counts[label]++
+		}
+	}
+
+	if withJokers {
+		maximumKey := '0'
+		maximumValue := 0
+		for label, count := range counts {
+			if count > maximumValue {
+				maximumKey = label
+				maximumValue = count
+			}
+		}
+
+		counts[maximumKey] += jokers
+	}
+
+	for _, count := range counts {
+		switch count {
+		case 5:
+			return FiveOfAKind
+		case 4:
+			return FourOfAKind
+		case 3:
+			hasThreeOfAKind = true
+		case 2:
+			pairs++
+		}
+	}
+
+	if hasThreeOfAKind && pairs == 1 {
+		return FullHouse
+	}
+
+	if hasThreeOfAKind {
+		return ThreeOfAKind
+	}
+
+	if pairs == 2 {
+		return TwoPair
+	}
+
+	if pairs == 1 {
+		return OnePair
+	}
+
+	return HighCard
+}
+
+func (g *Game) Sort(withJokers bool) {
+	values := map[rune]int{
 		'2': 2,
 		'3': 3,
 		'4': 4,
@@ -41,77 +99,14 @@ var (
 		'K': 13,
 		'A': 14,
 	}
-)
 
-func (h *Hand) DetermineKind() int {
-	hand := []rune(h.Value)
-	clusters := make([][]rune, len(hand))
-
-	slices.SortFunc(hand, func(a, b rune) int {
-		v1, v2 := values[a], values[b]
-
-		if v1 == v2 {
-			return 0
-		}
-
-		if v1 < v2 {
-			return -1
-		}
-
-		return 0
-	})
-
-	index := 0
-	clusters[index] = []rune{hand[0]}
-	for i := 1; i < len(hand); i++ {
-		current := hand[i]
-		previous := hand[i-1]
-
-		if current == previous {
-			clusters[index] = append(clusters[index], current)
-		} else {
-			index++
-			clusters[index] = append(clusters[index], current)
-		}
+	if withJokers {
+		values['J'] = 1
 	}
 
-	c1 := clusters[0]
-	c2 := clusters[1]
-	c3 := clusters[2]
-	c4 := clusters[3]
-	c5 := clusters[4]
-
-	if len(c1) == 5 {
-		return FiveOfAKind
-	}
-
-	if len(c1) == 4 || len(c2) == 4 {
-		return FourOfAKind
-	}
-
-	if len(c1) == 3 && len(c2) == 2 || len(c2) == 3 && len(c1) == 2 {
-		return FullHouse
-	}
-
-	if len(c1) == 3 || len(c2) == 3 || len(c3) == 3 {
-		return ThreeOfAKind
-	}
-
-	if len(c1) == 2 && len(c2) == 2 || len(c1) == 2 && len(c3) == 2 || len(c2) == 2 && len(c3) == 2 {
-		return TwoPair
-	}
-
-	if len(c1) == 2 || len(c2) == 2 || len(c3) == 2 || len(c4) == 2 || len(c5) == 2 {
-		return OnePair
-	}
-
-	return HighCard
-}
-
-func (g *Game) Sort() {
 	slices.SortFunc(g.Hands, func(a, b Hand) int {
-		aKind := a.DetermineKind()
-		bKind := b.DetermineKind()
+		aKind := a.DetermineKind(withJokers)
+		bKind := b.DetermineKind(withJokers)
 
 		if aKind < bKind {
 			return -1
