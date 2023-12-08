@@ -1,6 +1,6 @@
 # 🎄 Advent of code 2023 🎁
-## My solutions for this year's [advent of code](https://adventofcode.com/2023)
-### Saving Christmas, one line of code at the time
+## Saving Christmas, one line of code at the time
+### My solutions for this year's [advent of code](https://adventofcode.com/2023)
 
 Build & run:
 ```shell
