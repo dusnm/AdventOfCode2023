@@ -12,7 +12,7 @@ func gcd(a int, b int) int {
 
 func lcm(numbers ...int) (int, error) {
 	if len(numbers) < 2 {
-		return 0, errors.New("at least two numbers requiered for calculation")
+		return 0, errors.New("at least two numbers required for calculation")
 	}
 
 	a, b := numbers[0], numbers[1]
