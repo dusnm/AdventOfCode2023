@@ -79,6 +79,7 @@ func main() {
 		func() []int {
 			return []int{
 				day8.Puzzle1(day8.Input()),
+				day8.Puzzle2(day8.Input()),
 			}
 		},
 	}

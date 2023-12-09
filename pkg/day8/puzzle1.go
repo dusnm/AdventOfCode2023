@@ -8,10 +8,6 @@ const (
 func Puzzle1(input string) int {
 	game := New(input)
 
-	return Walk(&game)
-}
-
-func Walk(game *Game) int {
 	depth, next := 0, 0
 	lookup := GameStart
 
